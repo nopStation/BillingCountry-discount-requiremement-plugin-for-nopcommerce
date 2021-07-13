@@ -9,6 +9,7 @@ using Nop.Services.Discounts;
 using Nop.Services.Localization;
 using System.Threading.Tasks;
 using Nop.Services.Common;
+using Nop.Core;
 
 namespace Nop.Plugin.DiscountRules.BillingCountry
 {
@@ -21,6 +22,7 @@ namespace Nop.Plugin.DiscountRules.BillingCountry
         private readonly ILocalizationService _localizationService;
         private readonly IUrlHelperFactory _urlHelperFactory;
         private readonly IAddressService _addressService;
+        private readonly IWebHelper _webHelper;
 
         #endregion
 
@@ -30,13 +32,15 @@ namespace Nop.Plugin.DiscountRules.BillingCountry
             ISettingService settingService,
             ILocalizationService localizationService,
             IUrlHelperFactory urlHelperFactory,
-            IAddressService addressService)
+            IAddressService addressService,
+            IWebHelper webHelper)
         {
             _actionContextAccessor = actionContextAccessor;
             _settingService = settingService;
             _localizationService = localizationService;
             _urlHelperFactory = urlHelperFactory;
             _addressService = addressService;
+            _webHelper = webHelper;
         }
 
         #endregion
@@ -82,14 +86,9 @@ namespace Nop.Plugin.DiscountRules.BillingCountry
         public string GetConfigurationUrl(int discountId, int? discountRequirementId)
         {
             var urlHelper = _urlHelperFactory.GetUrlHelper(_actionContextAccessor.ActionContext);
-            var url = new PathString(urlHelper.Action("Configure", "DiscountRulesBillingCountry",
-                new { discountId = discountId, discountRequirementId = discountRequirementId }));
 
-            //remove the application path from the generated URL if exists
-            var pathBase = _actionContextAccessor.ActionContext?.HttpContext?.Request?.PathBase ?? PathString.Empty;
-            url.StartsWithSegments(pathBase, out url);
-
-            return url.Value.TrimStart('/');
+            return urlHelper.Action("Configure", "DiscountRulesBillingCountry",
+                new { discountId = discountId, discountRequirementId = discountRequirementId }, _webHelper.GetCurrentRequestProtocol());
         }
 
         public override async Task InstallAsync()

@@ -110,6 +110,7 @@ namespace Nop.Plugin.DiscountRules.BillingCountry.Controllers
                 //save new rule
                 discountRequirement = new DiscountRequirement()
                 {
+                    DiscountId = discount.Id,
                     DiscountRequirementRuleSystemName = "DiscountRequirement.BillingCountryIs"
                 };
                 await _discountService.InsertDiscountRequirementAsync(discountRequirement);
