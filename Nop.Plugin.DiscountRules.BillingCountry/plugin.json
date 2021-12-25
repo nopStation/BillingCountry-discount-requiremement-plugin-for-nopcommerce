@@ -3,7 +3,7 @@
   "FriendlyName": "Billing country is",
   "SystemName": "DiscountRequirement.BillingCountryIs",
   "Version": "1.22",
-  "SupportedVersions": [ "4.40" ],
+  "SupportedVersions": [ "4.50" ],
   "Author": "nopCommerce team, Nop-Station Team",
   "DisplayOrder": 1,
   "FileName": "Nop.Plugin.DiscountRules.BillingCountry.dll",
